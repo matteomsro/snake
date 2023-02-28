@@ -20,9 +20,10 @@ driver = webdriver.Chrome()
 
 # Accéder à une URL
 driver.get('https://www.google.com/fbx?fbx=snake_arcade')
+driver.execute_script("document.body.style.zoom='80%'")
 
 
-time.sleep(5)
+time.sleep(2)
 
 # Créer une instance de la classe ActionChains
 actions = ActionChains(driver)
@@ -30,26 +31,50 @@ actions = ActionChains(driver)
 # Simuler l'appui sur la touche espace
 actions.send_keys(Keys.SPACE).perform()
 
-time.sleep(5)
+time.sleep(2)
 
+actions.send_keys(Keys.RIGHT).perform()
 
+time.sleep(2)
 # Remplir un formulaire
-driver.get_screenshot_as_file("C:/Users/Estudiante/Downloads/screenshot.png")
+driver.get_screenshot_as_file("screenshot.png")
 
 
-time.sleep(5)
+time.sleep(1)
 
 
 # Ouvrir l'image
-image = Image.open("C:/Users/Estudiante/Downloads/screenshot.png")
+image = Image.open("screenshot.png")
 
-# Convertir l'image en tableau numpy
-pixel_array = np.array(image)
+width, height = image.size
+# Recadrer l'image
+image = image.crop((width*0.05, height*0.15, width*0.45, height*0.9))
 
-# Afficher la forme de la matrice (largeur x hauteur x 3)
-print(pixel_array.shape)
+# Pixeliser l'image
+pixel_size = 35
+image = image.resize((image.width // pixel_size, image.height // pixel_size), Image.NEAREST)
+image = image.resize((image.width, image.height), Image.NEAREST)
 
-# Accéder aux valeurs des pixels
-print(pixel_array)  # Affiche le pixel en haut à gauche
-# Fermer le navigateur
+# Enregistrer l'image pixelisée
+
+
+# Convertir l'image en niveau de gris
+image = image.convert("L")
+image.save("pixelated_image.png")
+
+# Obtenir la matrice de pixels
+pixel_matrix = np.array(Image.open("pixelated_image.png"))
+pixel_matrix[pixel_matrix > 150] = 0
+n = 5
+values = np.sort(pixel_matrix, axis=None)[::-1][:n]
+positions = [np.argwhere(pixel_matrix == i) for i in values]
+
+# Afficher les résultats
+for i in range(n):
+    print(f"Valeur maximale {i+1} : {values[i]}")
+    print(f"Position(s) : {positions[i]}\n")
+
+# Afficher la matrice
+print(pixel_matrix)
+
 driver.close()
