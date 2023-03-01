@@ -2,6 +2,7 @@ from selenium import webdriver
 from PIL import Image
 from io import BytesIO
 import numpy as np
+import cv2
 
 
 import time
@@ -59,13 +60,23 @@ image = image.resize((image.width, image.height), Image.NEAREST)
 
 
 # Convertir l'image en niveau de gris
-image = image.convert("L")
+
 image.save("pixelated_image.png")
+
+# Extraire les canaux rouge, vert et bleu de l'image
+b, g, r = cv2.split(image)
+
+# Créer une matrice de niveau de rouge en utilisant le canal rouge
+red_level = np.array(r)
+
+# Afficher la matrice de niveau de rouge
+print(red_level)
+
+image = image.convert("L")
 
 # Obtenir la matrice de pixels
 pixel_matrix = np.array(Image.open("pixelated_image.png"))
-pixel_matrix = np.where((pixel_matrix >= 130) & (pixel_matrix <= 250), 0, pixel_matrix)
-
+pixel_matrix = np.where((pixel_matrix >= 130) & (pixel_matrix <= 200), 0, pixel_matrix)
 
 
 
