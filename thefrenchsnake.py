@@ -2,7 +2,7 @@ from selenium import webdriver
 from PIL import Image
 from io import BytesIO
 import numpy as np
-import cv2
+
 
 
 import time
@@ -63,24 +63,28 @@ image = image.resize((image.width, image.height), Image.NEAREST)
 
 image.save("pixelated_image.png")
 
-# Extraire les canaux rouge, vert et bleu de l'image
-b, g, r = cv2.split(image)
-
-# Créer une matrice de niveau de rouge en utilisant le canal rouge
-red_level = np.array(r)
-
-# Afficher la matrice de niveau de rouge
-print(red_level)
-
-image = image.convert("L")
-
-# Obtenir la matrice de pixels
-pixel_matrix = np.array(Image.open("pixelated_image.png"))
-pixel_matrix = np.where((pixel_matrix >= 130) & (pixel_matrix <= 200), 0, pixel_matrix)
 
 
 
-# Afficher la matrice
-print(pixel_matrix)
+# Convertir l'image en un tableau NumPy
+image_array = np.array(image)
+
+# Extraire le canal rouge de l'image
+red_channel = image_array[:,:,0]
+
+print(red_channel)
+
+
+
+# Trouver les deux valeurs les plus grandes
+max_vals = np.partition(red_channel.flatten(), -2)[-2:]
+
+
+# Trouver les positions des deux valeurs les plus grandes
+pos_pomme_i = np.where(red_channel == max_vals[0])
+pos_pomme = list(zip(pos_pomme_i[0], pos_pomme_i[1]))
+pos_tete_i = np.where(red_channel == max_vals[1])
+pos_tete = list(zip(pos_tete_i[0], pos_tete_i[1]))
+
 
 driver.close()
