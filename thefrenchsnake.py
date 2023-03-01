@@ -64,15 +64,10 @@ image.save("pixelated_image.png")
 
 # Obtenir la matrice de pixels
 pixel_matrix = np.array(Image.open("pixelated_image.png"))
-pixel_matrix[pixel_matrix > 150] = 0
-n = 5
-values = np.sort(pixel_matrix, axis=None)[::-1][:n]
-positions = [np.argwhere(pixel_matrix == i) for i in values]
+pixel_matrix = np.where((pixel_matrix >= 130) & (pixel_matrix <= 250), 0, pixel_matrix)
 
-# Afficher les résultats
-for i in range(n):
-    print(f"Valeur maximale {i+1} : {values[i]}")
-    print(f"Position(s) : {positions[i]}\n")
+
+
 
 # Afficher la matrice
 print(pixel_matrix)
