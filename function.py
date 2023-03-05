@@ -1,30 +1,47 @@
+from queue import Queue
+
 def find_path(matrix, start, end):
-    stack = [start]
-    visited = {start: True}
-    instructions = {start: None}
+    # Créer une file vide et ajouter le point de départ
+    q = Queue()
+    q.put(start)
 
-    while stack:
-        current = stack.pop()
+    # Créer un dictionnaire pour enregistrer le chemin parcouru
+    path = {start: None}
+
+    while not q.empty():
+        current = q.get()
+
+        # Si on a atteint le point final, construire la liste de mouvements
         if current == end:
-            path = []
+            moves = []
             while current != start:
-                path.append(instructions[current])
-                current = tuple(map(lambda x, y: x - y, current, instructions[current]))
-            return list(reversed(path))
+                parent = path[current]
+                if parent[0] < current[0]:
+                    moves.append('bas')
+                elif parent[0] > current[0]:
+                    moves.append('haut')
+                elif parent[1] < current[1]:
+                    moves.append('droite')
+                elif parent[1] > current[1]:
+                    moves.append('gauche')
+                current = parent
+            return moves[::-1]
 
+        # Visiter les voisins du point actuel
         for neighbor in get_neighbors(matrix, current):
-            if neighbor not in visited:
-                stack.append(neighbor)
-                visited[neighbor] = True
-                instructions[neighbor] = tuple(map(lambda x, y: x - y, neighbor, current))
+            if neighbor not in path:
+                q.put(neighbor)
+                path[neighbor] = current
 
+    # Si on ne peut pas trouver de chemin, retourner None
     return None
 
-def get_neighbors(matrix, coord):
-    rows, cols = len(matrix), len(matrix[0])
+def get_neighbors(matrix, point):
+    # Récupérer les coordonnées des voisins valides
     neighbors = []
-    for i, j in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
-        row, col = coord[0] + i, coord[1] + j
-        if 0 <= row < rows and 0 <= col < cols and matrix[row][col] != '#':
-            neighbors.append((row, col))
+    rows, cols = len(matrix), len(matrix[0])
+    row, col = point
+    for r, c in [(row-1, col), (row+1, col), (row, col-1), (row, col+1)]:
+        if 0 <= r < rows and 0 <= c < cols and matrix[r][c] != 'X':
+            neighbors.append((r, c))
     return neighbors
