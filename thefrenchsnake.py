@@ -6,6 +6,8 @@ import numpy as np
 
 
 
+
+
 import time
 
 # Attendre 5 secondes avant de fermer le navigateur
@@ -39,19 +41,16 @@ time.sleep(2)
 
 actions.send_keys(Keys.RIGHT).perform()
 
-time.sleep(1)
+time.sleep(2)
 
 
 # Remplir un formulaire
 driver.get_screenshot_as_file("screenshot.png")
 
 
-time.sleep(1)
-
-
 # Ouvrir l'image
 image = Image.open("screenshot.png")
-
+image.convert("L")
 
 width, height = image.size
 # Recadrer l'image
@@ -64,9 +63,15 @@ image = image.resize((image.width // pixel_size, image.height // pixel_size), Im
 image = image.resize((image.width, image.height), Image.NEAREST)
 
 
-# Convertir l'image en niveau de gris
+time.sleep(1)
+
+
 
 image.save("pixelated_image.png")
+
+
+
+
 
 
 # Convertir l'image en un tableau NumPy
