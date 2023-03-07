@@ -43,64 +43,73 @@ actions.send_keys(Keys.RIGHT).perform()
 
 time.sleep(2)
 
+start_time = time.time()
 
-# Remplir un formulaire
-driver.get_screenshot_as_file("screenshot.png")
-
-
-# Ouvrir l'image
-image = Image.open("screenshot.png")
-image.convert("L")
-
-width, height = image.size
-# Recadrer l'image
-image = image.crop((width*0.05, height*0.15, width*0.45, height*0.9))
+# Code à exécuter pendant 60 secondes
+while True:
+    # instructions à exécuter ici
+    # Remplir un formulaire
+    driver.get_screenshot_as_file("screenshot.png")
 
 
-# Pixeliser l'image
-pixel_size = 35
-image = image.resize((image.width // pixel_size, image.height // pixel_size), Image.NEAREST)
-image = image.resize((image.width, image.height), Image.NEAREST)
+    # Ouvrir l'image
+    image = Image.open("screenshot.png")
+    image.convert("L")
+
+    width, height = image.size
+    # Recadrer l'image
+    image = image.crop((width*0.05, height*0.15, width*0.45, height*0.9))
 
 
-time.sleep(1)
+    # Pixeliser l'image
+    pixel_size = 35
+    image = image.resize((image.width // pixel_size, image.height // pixel_size), Image.NEAREST)
+    image = image.resize((image.width, image.height), Image.NEAREST)
+
+
+    #time.sleep(1)
+
+
+    image.save("pixelated_image.png")
+
+
+    # Convertir l'image en un tableau NumPy
+    image_array = np.array(image)
+
+    # Extraire le canal rouge de l'image
+    red_channel = image_array[:,:,0]
+
+    print(red_channel)
 
 
 
-image.save("pixelated_image.png")
+    # Trouver les deux valeurs les plus grandes
+    max_vals = np.partition(red_channel.flatten(), -2)[-2:]
+    if max_vals[0]>170:
+        # Trouver les positions des deux valeurs les plus grandes
+        pos_pomme_i = np.where(red_channel == max_vals[0])
+        pos_pomme = list(zip(pos_pomme_i[0], pos_pomme_i[1]))
+        pos_tete_i = np.where(red_channel == max_vals[1])
+        pos_tete = list(zip(pos_tete_i[0], pos_tete_i[1]))
+
+
+        print(pos_tete,pos_pomme)
+        list = find_path(red_channel,pos_tete[0],pos_pomme[0])
+        print(list)
+        actions.send_keys(dict[list[0]]).perform()
+    """
+    for elt in list:
+        actions.send_keys(dict[elt]).perform()
+        time.sleep(2)
+    """
+    
+
+    # Sortir de la boucle après 60 secondes
+    if time.time() > start_time + 60:
+        break
 
 
 
-
-
-
-# Convertir l'image en un tableau NumPy
-image_array = np.array(image)
-
-# Extraire le canal rouge de l'image
-red_channel = image_array[:,:,0]
-
-print(red_channel)
-
-
-
-# Trouver les deux valeurs les plus grandes
-max_vals = np.partition(red_channel.flatten(), -2)[-2:]
-
-
-# Trouver les positions des deux valeurs les plus grandes
-pos_pomme_i = np.where(red_channel == max_vals[0])
-pos_pomme = list(zip(pos_pomme_i[0], pos_pomme_i[1]))
-pos_tete_i = np.where(red_channel == max_vals[1])
-pos_tete = list(zip(pos_tete_i[0], pos_tete_i[1]))
-
-
-print(pos_tete,pos_pomme)
-list = find_path(red_channel,pos_tete[0],pos_pomme[0])
-print(list)
-for elt in list:
-    actions.send_keys(dict[elt]).perform()
-    time.sleep(2)
 
 
 

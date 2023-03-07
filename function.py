@@ -1,4 +1,7 @@
 from queue import Queue
+from PIL import Image, ImageOps
+
+
 
 def find_path(matrix, start, end):
     # Créer une file vide et ajouter le point de départ
