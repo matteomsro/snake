@@ -119,6 +119,8 @@ def snake():
             
         tableau[pos_pomme[0]-1][pos_pomme[1]-1]=0
         tableau[pos_tete[0]-1][pos_tete[1]-1]=0
+
+        tableau = surround_matrix(tableau)
         
     
 
