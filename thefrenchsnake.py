@@ -43,21 +43,14 @@ def snake():
 
     time.sleep(1)
 
-start_time = time.time()
-lit =[]
-i=0
-# Code à exécuter pendant 60 secondes
-timelist = []
-while True:
-
-
-    # instructions à exécuter ici
-    # Remplir un formulaire
-    driver.get_screenshot_as_file("screenshot.png")
-    #driver.get_screenshot_as_file("screenshot" + str(i) + ".png")
-
-
-
+    start_time = time.time()
+    lit =[]
+    i=0
+    # Code à exécuter pendant 60 secondes
+    timelist = []
+    while True:
+        driver.get_screenshot_as_file("screenshot.png")
+   
         # Ouvrir l'image
         image = Image.open("screenshot.png")
 
@@ -70,7 +63,7 @@ while True:
 
         # Convertir l'image en un tableau NumPy pour une manipulation rapide des pixels
         pixels = np.array(image)
-    input_array = np.array(image)
+        input_array = np.array(image)
         
         # Définir le seuil de tolérance pour les composantes rouge et verte
         tolerance = 100
@@ -113,20 +106,18 @@ while True:
             print("Pixel rouge trouvé à la position",pos_pomme)
 
     
-    
-    # Convertir l'image en un tableau NumPy
-    
 
-    # Extraire les pixels bleus
-    blue_mask = np.logical_and(input_array[:,:,2] > 0.5*input_array[:,:,0], input_array[:,:,2] > 0.5*input_array[:,:,1])
 
-    # Trouver les indices de tous les pixels bleus
-    blue_indices = np.argwhere(blue_mask)
-    tableau = np.zeros((15, 17))
-    for elt in blue_indices:
-        tableau[round(15*elt[0]/569)-1,round(17*elt[1]/614)-1]=1
-        
-    print(tableau)
+        # Extraire les pixels bleus
+        blue_mask = np.logical_and(input_array[:,:,2] > 0.5*input_array[:,:,0], input_array[:,:,2] > 0.5*input_array[:,:,1])
+
+        # Trouver les indices de tous les pixels bleus
+        blue_indices = np.argwhere(blue_mask)
+        tableau = np.zeros((15, 17))
+        for elt in blue_indices:
+            tableau[round(15*elt[0]/569)-1,round(17*elt[1]/614)-1]=1
+            
+        print(tableau)
     
 
         liste = find_path(tableau,pos_tete,pos_pomme)
@@ -159,24 +150,24 @@ while True:
         # Définir la police de caractères et la taille du texte
         font = ImageFont.truetype("arial.ttf", 20)
 
-    # Définir la position et le contenu du texte à écrire
-    texte = str(lit[i])
-    position = (10, 10)
+        # Définir la position et le contenu du texte à écrire
+        texte = str(lit[i])
+        position = (10, 10)
 
-    # Écrire le texte sur l'image
-    draw.text(position, texte, fill=(0), font=font)
+        # Écrire le texte sur l'image
+        draw.text(position, texte, fill=(0), font=font)
 
-    # Enregistrer l'image modifiée
-    image.save("screenshot" + str(i) + ".png")
+        # Enregistrer l'image modifiée
+        image.save("screenshot" + str(i) + ".png")
+        
+        i+=1
+
     
-    i+=1
-
     
     
-    
-    # Sortir de la boucle après 60 secondes
-    if time.time() > start_time + 60:
-        break
+        # Sortir de la boucle après 60 secondes
+        if time.time() > start_time + 60:
+            break
 
 
-driver.close()
+    driver.close()
