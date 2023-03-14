@@ -4,6 +4,7 @@ from PIL import Image, ImageOps
 
 
 def find_path(matrix, start, end):
+    moves=[]
     # Créer une file vide et ajouter le point de départ
     q = Queue()
     q.put(start)
