@@ -52,7 +52,7 @@ i=0
 timelist = []
 while True:
 
-   
+
     # instructions à exécuter ici
     # Remplir un formulaire
     driver.get_screenshot_as_file("screenshot.png")
@@ -72,7 +72,7 @@ while True:
 
     # Convertir l'image en un tableau NumPy pour une manipulation rapide des pixels
     pixels = np.array(image)
-
+    input_array = np.array(image)
     
     # Définir le seuil de tolérance pour les composantes rouge et verte
     tolerance = 100
@@ -107,7 +107,22 @@ while True:
         moyenne_rouge = np.mean(np.array([indices_rouge[0], indices_rouge[1]]), axis=1)
         pos_pomme=(round(15*moyenne_rouge[0]/569),round(17*moyenne_rouge[1]/614)+1)
     
+
+    
+    # Convertir l'image en un tableau NumPy
+    
+
+    # Extraire les pixels bleus
+    blue_mask = np.logical_and(input_array[:,:,2] > 0.5*input_array[:,:,0], input_array[:,:,2] > 0.5*input_array[:,:,1])
+
+    # Trouver les indices de tous les pixels bleus
+    blue_indices = np.argwhere(blue_mask)
     tableau = np.zeros((15, 17))
+    for elt in blue_indices:
+        tableau[round(15*elt[0]/569)-1,round(17*elt[1]/614)-1]=1
+        
+    print(tableau)
+    
 
   
 
