@@ -39,15 +39,12 @@ def find_path(matrix, start, end):
                 q.put(neighbor)
                 path[neighbor] = current
 
-    # Si on ne peut pas trouver de chemin, retourner None
-    return None
-
 def get_neighbors(matrix, point):
     # Récupérer les coordonnées des voisins valides
     neighbors = []
     rows, cols = len(matrix), len(matrix[0])
     row, col = point
     for r, c in [(row-1, col), (row+1, col), (row, col-1), (row, col+1)]:
-        if 0 <= r < rows and 0 <= c < cols and matrix[r][c] != 'X':
+        if 0 <= r < rows and 0 <= c < cols and matrix[r][c] != 'X' and matrix[r][c] != 1:
             neighbors.append((r, c))
     return neighbors
