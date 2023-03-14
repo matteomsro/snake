@@ -117,7 +117,9 @@ def snake():
         for elt in blue_indices:
             tableau[round(15*elt[0]/569)-1,round(17*elt[1]/614)-1]=1
             
-        print(tableau)
+        tableau[pos_pomme[0]][pos_pomme[1]]=0
+        tableau[pos_tete[0]][pos_tete[1]]=0
+        
     
 
         liste = find_path(tableau,pos_tete,pos_pomme)
