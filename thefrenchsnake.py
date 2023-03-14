@@ -1,5 +1,5 @@
 from selenium import webdriver
-from PIL import*
+from PIL import *
 from io import BytesIO
 from function import*
 import numpy as np
@@ -16,8 +16,11 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 3f9f07f81120f7de0d65573af029428682f9a60c
 dict = {"haut":Keys.UP,"bas":Keys.DOWN,"gauche":Keys.LEFT,"droite":Keys.RIGHT}
 # Créer une instance du navigateur Chrome
 driver = webdriver.Chrome()
@@ -123,6 +126,7 @@ while True:
     
     tableau = np.zeros((15, 17))
 
+<<<<<<< HEAD
     end_time = time.time()
 
     timelist.append(("pos", start_time - end_time))
@@ -133,14 +137,31 @@ while True:
     
 
 
+=======
+>>>>>>> 3f9f07f81120f7de0d65573af029428682f9a60c
     liste = find_path(tableau,pos_tete,pos_pomme)
 
     
     lit.append((i,pos_tete,pos_pomme,liste))
+<<<<<<< HEAD
     start_time = time.time()
     if len(liste)>0:
         actions.send_keys([dict[elt] for elt in liste]).perform()
         
+=======
+    #print(lit)
+    
+    #if isinstance(liste, list):
+    if len(liste)>0:
+        actions.send_keys([dict[elt] for elt in liste]).perform()
+    #else:
+     #   if len(liste_avt)>0:
+      #      actions.send_keys([dict[elt] for elt in liste]).perform()       
+    liste = []
+    #liste_avt=liste
+
+    
+>>>>>>> 3f9f07f81120f7de0d65573af029428682f9a60c
 
     end_time = time.time()
 
