@@ -120,12 +120,14 @@ def snake():
             liste_avt=liste
             liste=[]
         elif isinstance(liste_avt,list):
-            liste_avt2=liste_avt2
+            liste_avt2=liste_avt
             liste_avt=liste
             liste=[]
             print("ok")
         elif isinstance(liste_avt2,list):
             print("ok")
+            liste_avt2=liste_avt
+            liste_avt=liste
             liste=[]
         else:
             break
