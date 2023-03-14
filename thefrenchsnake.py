@@ -16,7 +16,6 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-
 dict = {"haut":Keys.UP,"bas":Keys.DOWN,"gauche":Keys.LEFT,"droite":Keys.RIGHT}
 # Créer une instance du navigateur Chrome
 driver = webdriver.Chrome()
@@ -106,16 +105,21 @@ while True:
 
     tableau = np.zeros((15, 17))
 
- 
     liste = find_path(tableau,pos_tete,pos_pomme)
     print(liste)
     #liste = list(set(liste))
     lit.append((i,pos_tete,pos_pomme,liste))
-    print(lit)
+    #print(lit)
+    
+    #if isinstance(liste, list):
     if len(liste)>0:
         actions.send_keys([dict[elt] for elt in liste]).perform()
-        
+    #else:
+     #   if len(liste_avt)>0:
+      #      actions.send_keys([dict[elt] for elt in liste]).perform()       
     liste = []
+    #liste_avt=liste
+
     
 
     # Créer un objet Draw pour dessiner sur l'image
