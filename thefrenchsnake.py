@@ -17,13 +17,18 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
+
 dict = {"haut":Keys.UP,"bas":Keys.DOWN,"gauche":Keys.LEFT,"droite":Keys.RIGHT}
 # Créer une instance du navigateur Chrome
 driver = webdriver.Chrome()
 
+
+
 # Accéder à une URL
 driver.get('https://www.google.com/fbx?fbx=snake_arcade')
 driver.execute_script("document.body.style.zoom='80%'")
+
+
 
 
 time.sleep(2)
@@ -44,12 +49,26 @@ start_time = time.time()
 lit =[]
 i=0
 # Code à exécuter pendant 60 secondes
+timelist = []
 while True:
+
+    start_time1 = time.time()
+
+    start_time = time.time()
     # instructions à exécuter ici
     # Remplir un formulaire
     driver.get_screenshot_as_file("screenshot.png")
     #driver.get_screenshot_as_file("screenshot" + str(i) + ".png")
 
+
+    # Enregistrer le temps de fin d'exécution
+    end_time = time.time()
+
+# Calculer le temps d'exécution
+    timelist.append(("screen",end_time - start_time))
+
+
+    start_time = time.time()
     # Ouvrir l'image
     image = Image.open("screenshot.png")
 
@@ -73,51 +92,64 @@ while True:
     # Appliquer le masque pour rendre tous les pixels non-rouge / non-blanc transparents
     pixels[~mask] = [0, 0, 0]
 
-    # Convertir le tableau NumPy modifié en une image PIL
-    result = Image.fromarray(pixels)
+    end_time = time.time()
+
+    timelist.append(("enleverpixel",start_time - end_time))
 
 
-    # Convertir l'image en un tableau NumPy
-    tableau_image = np.array(result)
+    start_time = time.time()
 
     # Définir le seuil de tolérance pour la détection des couleurs (20%)
     tolerance = 0.2
 
     # Trouver les pixels blancs
-    indices_blanc = np.where(np.all(tableau_image >= 255 * (1 - tolerance), axis=-1))
+    indices_blanc = np.where(np.all(pixels >= 255 * (1 - tolerance), axis=-1))
 
     if indices_blanc[0].size > 0:
         # Calculer la moyenne des positions des pixels blancs
         moyenne_blanc = np.mean(np.array([indices_blanc[0], indices_blanc[1]]), axis=1)
         pos_tete=(round(15*moyenne_blanc[0]/569)+1,round(17*moyenne_blanc[1]/614)+1)
-        print("Pixel blanc trouvé à la position",pos_tete)
 
     # Trouver les pixels rouges
     rouge_bas = np.array([255 * (1 - tolerance), 0, 0])
     rouge_haut = np.array([255, 255 * (1 - tolerance), 255 * (1 - tolerance)])
 
-    indices_rouge = np.where(np.all((tableau_image >= rouge_bas) & (tableau_image <= rouge_haut), axis=-1))
+    indices_rouge = np.where(np.all((pixels >= rouge_bas) & (pixels <= rouge_haut), axis=-1))
 
     if indices_rouge[0].size > 0:
         # Calculer la moyenne des positions des pixels rouges
         moyenne_rouge = np.mean(np.array([indices_rouge[0], indices_rouge[1]]), axis=1)
         pos_pomme=(round(15*moyenne_rouge[0]/569),round(17*moyenne_rouge[1]/614)+1)
-        print("Pixel rouge trouvé à la position",pos_pomme)
-
+    
     tableau = np.zeros((15, 17))
 
+    end_time = time.time()
+
+    timelist.append(("pos", start_time - end_time))
+
  
+
+    
+    
+
+
     liste = find_path(tableau,pos_tete,pos_pomme)
-    print(liste)
-    #liste = list(set(liste))
+
+    
     lit.append((i,pos_tete,pos_pomme,liste))
-    print(lit)
+    start_time = time.time()
     if len(liste)>0:
         actions.send_keys([dict[elt] for elt in liste]).perform()
         
-    liste = []
-    
 
+    end_time = time.time()
+
+    timelist.append(("instruc",start_time - end_time))
+
+
+    start_time = time.time()
+    
+    
     # Créer un objet Draw pour dessiner sur l'image
     draw = ImageDraw.Draw(image)
 
@@ -133,9 +165,15 @@ while True:
 
     # Enregistrer l'image modifiée
     image.save("screenshot" + str(i) + ".png")
-
-    i+=1
     
+    i+=1
+
+    end_time=time.time()
+
+    
+    timelist.append(("ecriture",start_time - end_time,"final",start_time1 - end_time))
+    
+    print("ici",timelist)
     
     # Sortir de la boucle après 60 secondes
     if time.time() > start_time + 60:
