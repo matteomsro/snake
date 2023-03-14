@@ -1,5 +1,5 @@
 from selenium import webdriver
-from PIL import*
+from PIL import *
 from io import BytesIO
 from function import*
 import numpy as np
