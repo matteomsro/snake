@@ -16,11 +16,8 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-<<<<<<< HEAD
 
 
-=======
->>>>>>> 3f9f07f81120f7de0d65573af029428682f9a60c
 dict = {"haut":Keys.UP,"bas":Keys.DOWN,"gauche":Keys.LEFT,"droite":Keys.RIGHT}
 # Créer une instance du navigateur Chrome
 driver = webdriver.Chrome()
@@ -55,23 +52,14 @@ i=0
 timelist = []
 while True:
 
-    start_time1 = time.time()
-
-    start_time = time.time()
+   
     # instructions à exécuter ici
     # Remplir un formulaire
     driver.get_screenshot_as_file("screenshot.png")
     #driver.get_screenshot_as_file("screenshot" + str(i) + ".png")
 
 
-    # Enregistrer le temps de fin d'exécution
-    end_time = time.time()
 
-# Calculer le temps d'exécution
-    timelist.append(("screen",end_time - start_time))
-
-
-    start_time = time.time()
     # Ouvrir l'image
     image = Image.open("screenshot.png")
 
@@ -95,12 +83,7 @@ while True:
     # Appliquer le masque pour rendre tous les pixels non-rouge / non-blanc transparents
     pixels[~mask] = [0, 0, 0]
 
-    end_time = time.time()
-
-    timelist.append(("enleverpixel",start_time - end_time))
-
-
-    start_time = time.time()
+ 
 
     # Définir le seuil de tolérance pour la détection des couleurs (20%)
     tolerance = 0.2
@@ -126,49 +109,20 @@ while True:
     
     tableau = np.zeros((15, 17))
 
-<<<<<<< HEAD
-    end_time = time.time()
-
-    timelist.append(("pos", start_time - end_time))
-
- 
-
-    
-    
+  
 
 
-=======
->>>>>>> 3f9f07f81120f7de0d65573af029428682f9a60c
     liste = find_path(tableau,pos_tete,pos_pomme)
 
     
     lit.append((i,pos_tete,pos_pomme,liste))
-<<<<<<< HEAD
-    start_time = time.time()
+  
     if len(liste)>0:
         actions.send_keys([dict[elt] for elt in liste]).perform()
         
-=======
-    #print(lit)
-    
-    #if isinstance(liste, list):
-    if len(liste)>0:
-        actions.send_keys([dict[elt] for elt in liste]).perform()
-    #else:
-     #   if len(liste_avt)>0:
-      #      actions.send_keys([dict[elt] for elt in liste]).perform()       
-    liste = []
-    #liste_avt=liste
 
-    
->>>>>>> 3f9f07f81120f7de0d65573af029428682f9a60c
-
-    end_time = time.time()
-
-    timelist.append(("instruc",start_time - end_time))
-
-
-    start_time = time.time()
+ 
+  
     
     
     # Créer un objet Draw pour dessiner sur l'image
@@ -189,12 +143,8 @@ while True:
     
     i+=1
 
-    end_time=time.time()
-
     
-    timelist.append(("ecriture",start_time - end_time,"final",start_time1 - end_time))
     
-    print("ici",timelist)
     
     # Sortir de la boucle après 60 secondes
     if time.time() > start_time + 60:
