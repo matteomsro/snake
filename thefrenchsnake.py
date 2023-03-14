@@ -116,9 +116,12 @@ def snake():
         tableau = np.zeros((15, 17))
         for elt in blue_indices:
             tableau[round(15*elt[0]/569)-1,round(17*elt[1]/614)-1]=1
-            
-        tableau[pos_pomme[0]-1][pos_pomme[1]-1]=0
-        tableau[pos_tete[0]-1][pos_tete[1]-1]=0
+        try:    
+            tableau[pos_pomme[0]-1][pos_pomme[1]-1]=0
+            tableau[pos_tete[0]-1][pos_tete[1]-1]=0
+
+        except IndexError:
+            break
 
         tableau = surround_matrix(tableau)
         
@@ -164,7 +167,7 @@ def snake():
         draw.text(position, texte, fill=(0), font=font)
 
         # Enregistrer l'image modifiée
-        image.save("screenshot" + str(i) + ".png")
+        #image.save("screenshot" + str(i) + ".png")
         
         i+=1
 
