@@ -6,6 +6,7 @@ import numpy as np
 import time
 from PIL import ImageDraw
 from PIL import ImageFont
+from scipy.ndimage import label, generate_binary_structure
 
 # Attendre 5 secondes avant de fermer le navigateur
 
@@ -77,12 +78,11 @@ def snake():
         # Convertir le tableau NumPy modifié en une image PIL
         result = Image.fromarray(pixels)
 
-
         # Convertir l'image en un tableau NumPy
         tableau_image = np.array(result)
 
-        # Définir le seuil de tolérance pour la détection des couleurs (20%)
-        tolerance = 0.2
+        # Définir le seuil de tolérance pour la détection des couleurs (30%)
+        tolerance = 0.3
 
         # Trouver les pixels blancs
         indices_blanc = np.where(np.all(tableau_image >= 255 * (1 - tolerance), axis=-1))
@@ -116,6 +116,8 @@ def snake():
         tableau = np.zeros((15, 17))
         for elt in blue_indices:
             tableau[round(15*elt[0]/569)-1,round(17*elt[1]/614)-1]=1
+            tableau[round(15*elt[0]/569)-1,round(17*elt[1]/614)-1]=1
+
         try:    
             tableau[pos_pomme[0]-1][pos_pomme[1]-1]=0
             tableau[pos_tete[0]-1][pos_tete[1]-1]=0
