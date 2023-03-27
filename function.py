@@ -59,3 +59,54 @@ def get_neighbors(matrix, point):
         if 0 <= r < rows and 0 <= c < cols and matrix[r][c] != 'X' and matrix[r][c] != 1:
             neighbors.append((r, c))
     return neighbors
+
+
+def find_shortest_path(image_path):
+    # Ouvrir l'image en niveau de gris et inverser les couleurs
+    image = ImageOps.invert(Image.open(image_path).convert('L'))
+    # Convertir l'image en un tableau numpy
+    matrix = np.array(image)
+    # Ajouter une bordure de murs autour de la matrice
+    surrounded = surround_matrix(matrix)
+    # Trouver les points de départ et d'arrivée
+    start = np.argwhere(matrix == 0)[0]
+    end = np.argwhere(matrix == 255)[-1]
+    # Trouver le chemin le plus court
+    path = find_path(surrounded, tuple(start + 1), tuple(end + 1))
+    
+    # Si le chemin est nul, il y a une erreur, renvoyer une liste vide
+    if path is None:
+        return []
+    
+    # Si la longueur du chemin est inférieure à 2, retourner le chemin tel quel
+    if len(path) < 2:
+        return path
+    
+    # Vérifier si le serpent se dirige vers le mur
+    if path[0] == 'bas' and matrix[start[0]+1][start[1]] == 1:
+        # Si le serpent va vers le bas et rencontre un mur, essayer de tourner à gauche ou à droite
+        if matrix[start[0]][start[1]-1] != 1:
+            return ['gauche'] + path
+        elif matrix[start[0]][start[1]+1] != 1:
+            return ['droite'] + path
+    elif path[0] == 'haut' and matrix[start[0]-1][start[1]] == 1:
+        # Si le serpent va vers le haut et rencontre un mur, essayer de tourner à gauche ou à droite
+        if matrix[start[0]][start[1]-1] != 1:
+            return ['gauche'] + path
+        elif matrix[start[0]][start[1]+1] != 1:
+            return ['droite'] + path
+    elif path[0] == 'droite' and matrix[start[0]][start[1]+1] == 1:
+        # Si le serpent va vers la droite et rencontre un mur, essayer de tourner en haut ou en bas
+        if matrix[start[0]-1][start[1]] != 1:
+            return ['haut'] + path
+        elif matrix[start[0]+1][start[1]] != 1:
+            return ['bas'] + path
+    elif path[0] == 'gauche' and matrix[start[0]][start[1]-1] == 1:
+        # Si le serpent va vers la gauche et rencontre un mur, essayer de tourner en haut ou en bas
+        if matrix[start[0]-1][start[1]] != 1:
+            return ['haut'] + path
+        elif matrix[start[0]+1][start[1]] != 1:
+            return ['bas'] + path
+    
+    # Sinon, retourner le chemin tel quel
+    return path
