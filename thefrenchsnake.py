@@ -81,8 +81,8 @@ def snake():
         # Convertir l'image en un tableau NumPy
         tableau_image = np.array(result)
 
-        # Définir le seuil de tolérance pour la détection des couleurs (30%)
-        tolerance = 0.3
+        # Définir le seuil de tolérance pour la détection des couleurs (20%)
+        tolerance = 0.2
 
         # Trouver les pixels blancs
         indices_blanc = np.where(np.all(tableau_image >= 255 * (1 - tolerance), axis=-1))
