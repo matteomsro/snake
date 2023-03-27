@@ -109,13 +109,18 @@ def snake():
 
 
         # Extraire les pixels bleus
-        blue_mask = np.logical_and(input_array[:,:,2] > 0.5*input_array[:,:,0], input_array[:,:,2] > 0.5*input_array[:,:,1])
+        blue_mask = np.logical_and(input_array[:,:,2] > 0.6*input_array[:,:,0], input_array[:,:,2] > 0.6*input_array[:,:,1])
 
         # Trouver les indices de tous les pixels bleus
         blue_indices = np.argwhere(blue_mask)
+
+
+        
         tableau = np.zeros((15, 17))
         for elt in blue_indices:
-            tableau[round(15*elt[0]/569)-1,round(17*elt[1]/614)-1]=1
+             row_index = int(np.floor(15*elt[0]/input_array.shape[0]))
+             col_index = int(np.floor(17*elt[1]/input_array.shape[1]))
+             tableau[row_index, col_index] = 1
         try:    
             tableau[pos_pomme[0]-1][pos_pomme[1]-1]=0
             tableau[pos_tete[0]-1][pos_tete[1]-1]=0
@@ -123,8 +128,10 @@ def snake():
         except IndexError:
             break
 
-        tableau = surround_matrix(tableau)
         
+
+        tableau = surround_matrix(tableau)
+        print(tableau)
     
 
         liste = find_path(tableau,pos_tete,pos_pomme)
