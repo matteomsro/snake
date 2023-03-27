@@ -6,6 +6,7 @@ import numpy as np
 import time
 from PIL import ImageDraw
 from PIL import ImageFont
+from scipy.ndimage import label, generate_binary_structure
 
 # Attendre 5 secondes avant de fermer le navigateur
 
@@ -76,7 +77,6 @@ def snake():
 
         # Convertir le tableau NumPy modifié en une image PIL
         result = Image.fromarray(pixels)
-
 
         # Convertir l'image en un tableau NumPy
         tableau_image = np.array(result)
