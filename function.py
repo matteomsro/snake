@@ -2,14 +2,7 @@ from queue import Queue
 from PIL import Image, ImageOps
 import numpy as np
 
-def surround_matrix(matrix):
-    m, n = matrix.shape
-    surrounded = np.zeros((m + 2, n + 2), dtype=int)
-    for i in range(m):
-        for j in range(n):
-            if matrix[i][j] == 'X':
-                surrounded[i + 1][j + 1] = 1
-    return surrounded
+
 
 def find_path(matrix, start, end):
     if end==None:
