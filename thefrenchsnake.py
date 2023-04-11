@@ -18,10 +18,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 def snake():
-    j=4
-    liste_avt=[]
-    liste_avt2=[]
-    historique=[[0,0]]
+    j=5
+    historique=[[8,1],[8,2],[8,3],[8,4]]
 
     dict = {"haut":Keys.UP,"bas":Keys.DOWN,"gauche":Keys.LEFT,"droite":Keys.RIGHT}
     # Créer une instance du navigateur Chrome
@@ -51,6 +49,7 @@ def snake():
     i=0
     # Code à exécuter pendant 60 secondes
     timelist = []
+    k=0
     while True:
         driver.get_screenshot_as_file("screenshot.png")
    
@@ -108,34 +107,27 @@ def snake():
             print("Pixel rouge trouvé à la position",pos_pomme)
 
         if len(historique)>j:
-            historique.pop(0)
-        if abs(pos_tete[0]-pos_pomme[0])<2 and abs(pos_tete[1]-pos_pomme[1])<2 : j+=1
+            while len(historique)>j:
+                historique.pop(0)
         tableau = np.zeros((15, 17))
         historique.append(pos_tete)
         for m in historique:
             tableau[m[0]-1,m[1]-1]=1
         liste = find_path(tableau,pos_tete,pos_pomme)
-        #print(tableau)
+        if abs(pos_pomme[0]-pos_tete[0])<2 and abs(pos_pomme[1]-pos_tete[1])<2:
+            j+=1
+        print(tableau)
         #liste = list(set(liste))
         lit.append((i,pos_tete,pos_pomme,liste))
         #print(lit)
         if isinstance(liste, list):
             actions.send_keys([dict[elt] for elt in liste]).perform()
-            liste_avt2=liste_avt
-            liste_avt=liste
-            liste=[]
-        elif isinstance(liste_avt,list):
-            liste_avt2=liste_avt
-            liste_avt=liste
-            liste=[]
-            print("ok")
-        elif isinstance(liste_avt2,list):
-            print("ok")
-            liste_avt2=liste_avt
-            liste_avt=liste
-            liste=[]
         else:
-            break
+            if k==8:
+                break
+            k+=1
+        liste=[]
+
 
 
         

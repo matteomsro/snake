@@ -1,6 +1,5 @@
 from thefrenchsnake import *
 import datetime
-
 if __name__ == "__main__":
     i = 0
     while i < 100:

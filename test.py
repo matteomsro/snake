@@ -47,17 +47,37 @@ def find_path(matrix, start, end):
 def get_neighbors(matrix, point):
     # Récupérer les coordonnées des voisins valides
     neighbors = []
-    x, y = point
-    for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
-        new_x, new_y = x + dx, y + dy
-        if (0 <= new_x < matrix.shape[0] and 0 <= new_y < matrix.shape[1]
-                and matrix[new_x, new_y] != -1 and ((dx == 0) or matrix[x+dx, y] != -1) and ((dy == 0) or matrix[x, y+dy] != -1)):
-            neighbors.append((new_x, new_y))
+    rows, cols = matrix.shape
+    for move in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
+        neighbor = (point[0] + move[0], point[1] + move[1])
+        if (
+            0 <= neighbor[0] < rows and 
+            0 <= neighbor[1] < cols and 
+            matrix[neighbor[0], neighbor[1]] == 0 
+        ):
+            neighbors.append(neighbor)
+    return neighbors
+
     return neighbors
 
 
-    return neighbors
 
 
+if __name__ == "__main__":
 
 
+    matrix = np.zeros((5, 5), dtype=int)
+    matrix[0, :] = -1
+    matrix[-1, :] = -1
+    matrix[:, 0] = -1
+    matrix[:, -1] = -1
+    matrix[2, 2] = 1
+
+    # Trouver le chemin entre (1, 1) et (3, 3)
+    start = (1, 1)
+    end = (3, 3)
+    path = find_path(matrix, start, end)
+
+    # Vérifier que le chemin est valide
+    print(path)
+    assert path == ['droite', 'droite', 'droite', 'bas', 'bas']
