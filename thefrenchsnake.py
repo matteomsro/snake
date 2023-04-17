@@ -12,10 +12,10 @@ from scipy.ndimage import label, generate_binary_structure
 
 
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
+
 
 def snake():
     j=5
@@ -23,6 +23,9 @@ def snake():
 
     dict = {"haut":Keys.UP,"bas":Keys.DOWN,"gauche":Keys.LEFT,"droite":Keys.RIGHT}
     # Créer une instance du navigateur Chrome
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    driver = webdriver.Chrome(options=chrome_options)
     driver = webdriver.Chrome()
 
     # Accéder à une URL
@@ -116,7 +119,7 @@ def snake():
         liste = find_path(tableau,pos_tete,pos_pomme)
         if abs(pos_pomme[0]-pos_tete[0])<2 and abs(pos_pomme[1]-pos_tete[1])<2:
             j+=1
-        print(tableau)
+        #print(tableau)
         #liste = list(set(liste))
         lit.append((i,pos_tete,pos_pomme,liste))
         #print(lit)
